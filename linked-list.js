@@ -1,5 +1,9 @@
 class LinkedList {
   constructor(list) {
+    if (list === undefined) {
+      this.size = 0;
+      return;
+    }
     let linkedList = { value: list[0] };
     this.head = linkedList;
     let item = linkedList;
@@ -11,21 +15,29 @@ class LinkedList {
     }
     this.size = total;
   }
-  Node(value) {
-    return { value, next: null, previous: null };
+  Node(key, value) {
+    return { key, value, next: null, previous: null };
   }
-  append(value) {
-    const item = this.Node(value);
+  append(key, value) {
+    const item = this.Node(key, value);
+    if (this.tail === undefined) {
+      this.head = item;
+      this.tail = item;
+      this.size = 1;
+      return;
+    }
     this.tail.next = item;
     item.previous = this.tail;
     this.tail = item;
     item.next = null;
+    this.size++;
   }
-  prepend(value) {
-    const item = this.Node(value);
+  prepend(key, value) {
+    const item = this.Node(key, value);
     item.next = this.head;
     item.previous = null;
     this.head = item;
+    this.size++;
   }
   at(index) {
     let item = this.head;
@@ -37,6 +49,7 @@ class LinkedList {
   pop() {
     this.tail = this.tail.previous;
     this.tail.next = null;
+    this.size--;
   }
   toString() {
     let item = this.head;
@@ -51,29 +64,28 @@ class LinkedList {
   contains(value) {
     let item = this.head;
     do {
-      if (item.value === value) {
+      if (item.key === value) {
         return true;
       }
       item = item.next;
     } while (item.next !== null);
     return false;
   }
-  find(value) {
+  find(key) {
     let item = this.head;
     let i = 0;
     do {
+      if (item.key === key) {
+        return item.value;
+      }
       item = item.next;
       i++;
-      if (item.value === value) {
-        return i;
-      } else {
-      }
     } while (item.next !== null);
     return null;
   }
-  insertAt(value, index) {
+  insertAt(key, value, index) {
     let item = this.head;
-    const insert = this.Node(value);
+    const insert = this.Node(key, value);
     for (let i = 0; i < index - 1; i++) {
       item = item.next;
     }
@@ -81,6 +93,7 @@ class LinkedList {
     insert.previous = item;
     item.next = insert;
     insert.next.previous = insert;
+    this.size++;
   }
   removeAt(index) {
     let item = this.head;
@@ -88,6 +101,7 @@ class LinkedList {
       item = item.next;
     }
     item.next = item.next.next;
+    this.size--;
   }
 }
 
