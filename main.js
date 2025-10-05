@@ -8,9 +8,9 @@ class HashMap {
     this.buckets = [];
     this.clear();
   }
-  clear() {
+  clear(capacity = 16) {
     this.buckets = [];
-    this.capacity = 16;
+    this.capacity = capacity;
     for (let i = 0; i < this.capacity; i++) {
       this.buckets.push(new LinkedList());
     }
@@ -30,7 +30,11 @@ class HashMap {
     }
   }
   expand() {
-    // this.capacity *= 2;
+    const entries = this.entries;
+    this.clear((this.capacity *= 2));
+    for (let i = 0; i < entries.length; i++) {
+      this.set(entries[i][0], entries[i][1]);
+    }
   }
   get(key) {
     return this.buckets[this.hash(key) % this.capacity].find(key);
@@ -76,20 +80,3 @@ class HashMap {
     return length;
   }
 }
-
-const map = new HashMap();
-map.set("key", "test");
-map.set("dog", "test");
-map.set("test", "test");
-map.set("cat", "test");
-map.set("banana", "test");
-map.set("apple", "test");
-map.set("granola", "test");
-map.set("shit", "test");
-map.set("pineapple", "text");
-map.set("pear", "text");
-map.set("shirt", "text");
-map.set("map", "text");
-map.set("text", "text");
-map.set("potato", "asd");
-console.log(map.values);
